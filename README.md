@@ -2,6 +2,11 @@
 
 This script automatically donwloads new videos from Youtube users to a Dropbox folder
 
+## Prerequisites
+
+- dropbox
+- youtube-dl
+
 ## Configuration
 
 ```bash
