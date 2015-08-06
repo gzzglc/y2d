@@ -1,0 +1,26 @@
+#!/bin/bash
+
+YOUTUBE_USERS=""
+OUTPUT_FOLDER="/user/Dropbox/Youtube"
+LOG_FILE="/user/y2d.log"
+
+for YOUTUBE_USER in $YOUTUBE_USERS
+do
+    mkdir -p $OUTPUT_FOLDER/$YOUTUBE_USER/.index/
+
+    RSS_FEED="`wget -qO- https://www.youtube.com/feeds/videos.xml?user=$YOUTUBE_USER`"
+    VIDEO_LIST=$(echo $RSS_FEED | grep -o '<link rel="alternate" href="http[s]*://www.youtube.com/watch?v=[^"]*' | grep -o '[^"]*$')
+
+    for VIDEO_URL in $VIDEO_LIST
+    do
+        VIDEO_ID=$(echo $VIDEO_URL | grep -o 'watch?v=[^.]*' | grep -o '[^=]*$')
+        INDEX_FILE=$OUTPUT_FOLDER/$YOUTUBE_USER/.index/$VIDEO_ID
+        
+        if [ ! -e "$INDEX_FILE" ]
+        then
+            echo "$(date "+%Y-%m-%d %H:%M:%S") downloading new video $VIDEO_URL" >> $LOG_FILE
+            youtube-dl --no-cache-dir -o "$OUTPUT_FOLDER/$YOUTUBE_USER/%(title)s-%(id)s.%(ext)s" $VIDEO_URL 
+            touch $INDEX_FILE
+        fi
+    done
+done
