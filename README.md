@@ -5,6 +5,8 @@ This script automatically donwloads new videos from Youtube users to a Dropbox f
 ## Configuration
 
 YOUTUBE_USERS=""
+
 OUTPUT_FOLDER="/user/Dropbox/Youtube"
+
 LOG_FILE="/user/y2d.log"
 
